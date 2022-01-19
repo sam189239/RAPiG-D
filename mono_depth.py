@@ -83,3 +83,21 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+
+# https://learnopencv.com/how-to-use-opencv-dnn-module-with-nvidia-gpu-on-windows/
+
+# cmake ^
+# -G "Visual Studio 17 2022" ^
+# -T host=x64 ^
+# -DCMAKE_BUILD_TYPE=RELEASE ^
+# -DCMAKE_INSTALL_PREFIX=%cwd%/OpenCV-%opencv-version% ^
+# -DOPENCV_EXTRA_MODULES_PATH=%cwd%/opencv_contrib/modules ^
+# -DINSTALL_PYTHON_EXAMPLES=OFF ^
+# -DINSTALL_C_EXAMPLES=OFF ^
+# -DPYTHON_EXECUTABLE=%CONDA_PREFIX%/python3 ^
+# -DPYTHON3_LIBRARY=%CONDA_PREFIX%/libs/python3 ^
+# -DWITH_CUDA=ON ^
+# -DWITH_CUDNN=ON ^
+# -DOPENCV_DNN_CUDA=ON ^
+# -DWITH_CUBLAS=ON ^
+# ..
