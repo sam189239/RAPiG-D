@@ -23,7 +23,7 @@ def update():
     # Summed costs for all episodes in resulted list
     all_costs = []
 
-    for episode in range(100):
+    for episode in range(1000):
         # Initial Observation
         observation = env.reset()
 
