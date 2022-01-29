@@ -13,7 +13,7 @@
 
 # Importing classes
 from env import Environment
-from agent_brain import QLearningTable
+from agent_brain import QLearningTable 
 
 
 def update():
@@ -23,7 +23,7 @@ def update():
     # Summed costs for all episodes in resulted list
     all_costs = []
 
-    for episode in range(1000):
+    for episode in range(100):
         # Initial Observation
         observation = env.reset()
 

@@ -11,7 +11,7 @@
 # Reference to:
 # Valentyn N Sichkar. Reinforcement Learning Algorithms for global path planning // GitHub platform. DOI: 10.5281/zenodo.1317899
 
-
+ 
 
 # Importing libraries
 import numpy as np  # To deal with data in form of matrices
@@ -35,7 +35,7 @@ class Environment(tk.Tk, object):
         self.action_space = ['up', 'down', 'left', 'right']
         self.n_actions = len(self.action_space)
         self.title('RL Q-learning. Sichkar Valentyn')
-        self.geometry('{0}x{1}'.format(env_height * pixels, env_height * pixels))
+        self.geometry('{0}x{1}'.format(env_width * pixels, env_height * pixels))
         self.build_environment()
 
         # Dictionaries to draw the final route
