@@ -1,4 +1,4 @@
-## Exploration nad Obstacle avoidance bot
+## Exploration and Obstacle avoidance bot
 
 Running Document Link:
 https://docs.google.com/document/d/1vwrGxCIrcvRqucOWhcWR-VRB-sS4QpR6IvBUO1a9d54/edit?usp=sharing 
