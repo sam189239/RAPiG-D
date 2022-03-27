@@ -1,0 +1,11 @@
+random policy
+f-silent value
+if f-silent > threshold
+then greedy policy
+
+q-learning
+bellmann equation
+markov decision process
+
+deep deterministic policy gradient
+policy gradient 
