@@ -3,6 +3,7 @@ import freenect
 import cv2
 from demo import frame_convert2
 import numpy as np
+import time
 
 alert_thresh = 0.15
 threshold = 150
@@ -38,8 +39,12 @@ def show_depth(): ## 640x480
     depth = cv2.cvtColor(depth, cv2.COLOR_GRAY2RGB)
 
     is_obj = check_if_object(depth)
-    if is_obj: color = (0, 0, 255)
-    else: color = (0, 255, 0)
+    if is_obj: 
+        color = (0, 0, 255)
+        print('Object')
+        time.sleep(1)
+    else: 
+        color = (0, 255, 0)
     
     frame = cv2.rectangle(depth, ROI[0], ROI[1], color, 1)
     
