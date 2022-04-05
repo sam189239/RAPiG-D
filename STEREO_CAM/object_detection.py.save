@@ -4,7 +4,6 @@ import cv2
 from demo import frame_convert2
 import numpy as np
 import time
-import requests
 
 alert_thresh = 0.15
 threshold = 150
@@ -15,17 +14,8 @@ roi_val = 0.25
 
 ROI = [(int(width * roi_val), int(height * roi_val)), (int(width * (1-roi_val)), int(height * (1-roi_val)))]
 
-
-n=0
-
-def send_to_flask(obj):
-    global n
-    if obj:
-    	data = {'obj':'obj'}
-    else:
-    	data = {'obj':'no_obj'}
-    r = requests.post("http://localhost:5000", data = data)
-    n = n+1
+def send_to_flask(n):
+    r = requests.post("http://localhost:5000", data = n)
 
 def change_threshold(value):
     global threshold
@@ -55,17 +45,9 @@ def show_depth(): ## 640x480
     if is_obj: 
         color = (0, 0, 255)
         print('Object')
-        try:
-        	send_to_flask(True)
-        except Exception as e:
-        	pass
         time.sleep(1)
     else: 
         color = (0, 255, 0)
-        try:
-        	send_to_flask(False)
-        except Exception as e:
-        	pass
     
     frame = cv2.rectangle(depth, ROI[0], ROI[1], color, 1)
     
@@ -79,7 +61,7 @@ def show_video():
 
 
 cv2.namedWindow('Depth')
-#cv2.namedWindow('Video')
+cv2.namedWindow('Video')
 #cv2.createTrackbar('threshold', 'Depth', threshold,     500,  change_threshold)
 #cv2.createTrackbar('depth',     'Depth', current_depth, 2048, change_depth)
 
@@ -89,6 +71,6 @@ print('Press ESC in window to stop')
 
 while 1:
     show_depth()
-    #show_video()
+    show_video()
     if cv2.waitKey(10) == 27:
         break
