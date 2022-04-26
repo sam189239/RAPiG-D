@@ -1,11 +1,3 @@
-###################################
-##### Authors:                #####
-##### Stephane Vujasinovic    #####
-##### Frederic Uhrweiller     ##### 
-#####                         #####
-##### Creation: 2017          #####
-###################################
-
 import numpy as np
 import cv2
 
@@ -19,7 +11,7 @@ criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 # Call the two cameras
 CamR= cv2.VideoCapture(0)   # 0 -> Right Camera
-CamL= cv2.VideoCapture(1)   # 2 -> Left Camera
+CamL= cv2.VideoCapture(1)   # 1 -> Left Camera
 
 while True:
     retR, frameR= CamR.read()
@@ -33,7 +25,7 @@ while True:
     cv2.imshow('imgR',frameR)
     cv2.imshow('imgL',frameL)
 
-    # If found, add object points, image points (after refining them)
+    # If found, add object p oints, image points (after refining them)
     if (retR == True) & (retL == True):
         corners2R= cv2.cornerSubPix(grayR,cornersR,(11,11),(-1,-1),criteria)    # Refining the Position
         corners2L= cv2.cornerSubPix(grayL,cornersL,(11,11),(-1,-1),criteria)

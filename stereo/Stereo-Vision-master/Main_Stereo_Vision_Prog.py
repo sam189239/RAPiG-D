@@ -1,23 +1,3 @@
-﻿#      ▄▀▄     ▄▀▄
-#     ▄█░░▀▀▀▀▀░░█▄
-# ▄▄  █░░░░░░░░░░░█  ▄▄
-#█▄▄█ █░░▀░░┬░░▀░░█ █▄▄█
-
-###################################
-##### Authors:                #####
-##### Stephane Vujasinovic    #####
-##### Frederic Uhrweiller     ##### 
-#####                         #####
-##### Creation: 2017          #####
-###################################
-
-
-#***********************
-#**** Main Programm ****
-#***********************
-
-
-# Package importation
 import numpy as np
 import cv2
 from openpyxl import Workbook # Used for writing data into an Excel file
