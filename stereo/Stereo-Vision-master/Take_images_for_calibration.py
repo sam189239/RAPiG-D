@@ -28,10 +28,10 @@ while True:
     grayL= cv2.cvtColor(frameL,cv2.COLOR_BGR2GRAY)
 
     # Find the chess board corners
-    retR, cornersR = cv2.findChessboardCorners(grayR,(9,6),None)  # Define the number of chess corners (here 9 by 6) we are looking for with the right Camera
-    retL, cornersL = cv2.findChessboardCorners(grayL,(9,6),None)  # Same with the left camera
-    cv2.imshow('imgR',frameR)
-    cv2.imshow('imgL',frameL)
+    retR, cornersR = cv2.findChessboardCorners(grayR,(10,7),None)  # Define the number of chess corners (here 9 by 6) we are looking for with the right Camera
+    retL, cornersL = cv2.findChessboardCorners(grayL,(10,7),None)  # Same with the left camera
+    cv2.imshow('imgR',grayR)
+    cv2.imshow('imgL',grayL)
 
     # If found, add object points, image points (after refining them)
     if (retR == True) & (retL == True):
@@ -39,14 +39,14 @@ while True:
         corners2L= cv2.cornerSubPix(grayL,cornersL,(11,11),(-1,-1),criteria)
 
         # Draw and display the corners
-        cv2.drawChessboardCorners(grayR,(9,6),corners2R,retR)
-        cv2.drawChessboardCorners(grayL,(9,6),corners2L,retL)
+        cv2.drawChessboardCorners(grayR,(10,7),corners2R,retR)
+        cv2.drawChessboardCorners(grayL,(10,7),corners2L,retL)
         cv2.imshow('VideoR',grayR)
         cv2.imshow('VideoL',grayL)
 
         if cv2.waitKey(0) & 0xFF == ord('s'):   # Push "s" to save the images and "c" if you don't want to
             str_id_image= str(id_image)
-            print('Images ' + t + ' saved for right and left cameras')
+            print('Images ' + str_id_image + ' saved for right and left cameras')
             cv2.imwrite('chessboard-R'+str_id_image+'.png',frameR) # Save the image in the file where this Programm is located
             cv2.imwrite('chessboard-L'+str_id_image+'.png',frameL)
             id_image=id_image+1
