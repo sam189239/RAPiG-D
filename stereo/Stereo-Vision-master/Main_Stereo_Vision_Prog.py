@@ -42,8 +42,8 @@ criteria =(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 # Prepare object points
-objp = np.zeros((9*6,3), np.float32)
-objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
+objp = np.zeros((10*7,3), np.float32)
+objp[:,:2] = np.mgrid[0:10,0:7].T.reshape(-1,2)
 
 # Arrays to store object points and image points from all images
 objpoints= []   # 3d points in real world space
@@ -53,18 +53,19 @@ imgpointsL= []
 # Start calibration from the camera
 print('Starting calibration for the 2 cameras... ')
 # Call all saved images
-for i in range(0,67):   # Put the amount of pictures you have taken for the calibration inbetween range(0,?) wenn starting from the image number 0
+for i in range(0,27):   # Put the amount of pictures you have taken for the calibration inbetween range(0,?) wenn starting from the image number 0
     t= str(i)
     ChessImaR= cv2.imread('chessboard-R'+t+'.png',0)    # Right side
     ChessImaL= cv2.imread('chessboard-L'+t+'.png',0)    # Left side
     retR, cornersR = cv2.findChessboardCorners(ChessImaR,
-                                               (9,6),None)  # Define the number of chees corners we are looking for
+                                               (10,7),None)  # Define the number of chees corners we are looking for
     retL, cornersL = cv2.findChessboardCorners(ChessImaL,
-                                               (9,6),None)  # Left side
+                                               (10,7),None)  # Left side
     if (True == retR) & (True == retL):
         objpoints.append(objp)
         cv2.cornerSubPix(ChessImaR,cornersR,(11,11),(-1,-1),criteria)
         cv2.cornerSubPix(ChessImaL,cornersL,(11,11),(-1,-1),criteria)
+        # print("detected")
         imgpointsR.append(cornersR)
         imgpointsL.append(cornersL)
 
@@ -159,8 +160,8 @@ wls_filter.setSigmaColor(sigma)
 #*************************************
 
 # Call the two cameras
-CamR= cv2.VideoCapture(0)   # Wenn 0 then Right Cam and wenn 2 Left Cam
-CamL= cv2.VideoCapture(2)
+CamR= cv2.VideoCapture(1)   # Wenn 0 then Right Cam and wenn 2 Left Cam
+CamL= cv2.VideoCapture(0)
 
 while True:
     # Start Reading Camera images
@@ -211,8 +212,8 @@ while True:
     # Colors map
     dispc= (closing-closing.min())*255
     dispC= dispc.astype(np.uint8)                                   # Convert the type of the matrix from float32 to uint8, this way you can show the results with the function cv2.imshow()
-    disp_Color= cv2.applyColorMap(dispC,cv2.COLORMAP_OCEAN)         # Change the Color of the Picture into an Ocean Color_Map
-    filt_Color= cv2.applyColorMap(filteredImg,cv2.COLORMAP_OCEAN) 
+    disp_Color= cv2.applyColorMap(dispC,cv2.COLORMAP_JET)         # Change the Color of the Picture into an Ocean Color_Map
+    filt_Color= cv2.applyColorMap(filteredImg,cv2.COLORMAP_JET) 
 
     # Show the result for the Depth_image
     #cv2.imshow('Disparity', disp)
