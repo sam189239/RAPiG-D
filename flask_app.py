@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-out = 'no_obj'
+#out = 'nobj'
 
 @app.route("/", methods=['POST'])
 def post_data():
@@ -18,4 +18,4 @@ def get_data():
 	return Response('{}'.format(out))
 	
 if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')
+	app.run(debug=True, host='0.0.0.0', port = 8000)

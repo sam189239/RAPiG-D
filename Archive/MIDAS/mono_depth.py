@@ -7,8 +7,8 @@ import time
 path_model = "models/"
 
 # Read Network
-model_name = "model-f6b98070.onnx"; # MiDaS v2.1 Large
-# model_name = "model-small.onnx"; # MiDaS v2.1 Small
+#model_name = "model-f6b98070.onnx"; # MiDaS v2.1 Large
+model_name = "model-small.onnx"; # MiDaS v2.1 Small
 
 
 # Load the DNN model
@@ -25,7 +25,7 @@ model.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
 
 vid_dir = 'road_sample.mp4'
 # Webcam
-cap = cv2.VideoCapture(vid_dir)
+cap = cv2.VideoCapture(0)
 
 
 while cap.isOpened():

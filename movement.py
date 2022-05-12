@@ -11,7 +11,7 @@ motor_pin_d=25 #board pin 22 - right back
 def fwd():
 	GPIO.output(motor_pin_a, GPIO.HIGH)
 	GPIO.output(motor_pin_b, GPIO.HIGH)
-	time.sleep(2)
+	time.sleep(1.5)
 	GPIO.output(motor_pin_a, GPIO.LOW)
 	GPIO.output(motor_pin_b, GPIO.LOW)
 
@@ -24,21 +24,21 @@ def stop():
 def back():
 	GPIO.output(motor_pin_c, GPIO.HIGH)
 	GPIO.output(motor_pin_d, GPIO.HIGH)
-	time.sleep(2)
+	time.sleep(1.6)
 	GPIO.output(motor_pin_c, GPIO.LOW)
 	GPIO.output(motor_pin_d, GPIO.LOW)
 
 def left():
 	GPIO.output(motor_pin_c, GPIO.HIGH)
 	GPIO.output(motor_pin_b, GPIO.HIGH)
-	time.sleep(1.3)
+	time.sleep(1.6)
 	GPIO.output(motor_pin_c, GPIO.LOW)
 	GPIO.output(motor_pin_b, GPIO.LOW)
  
 def right():
 	GPIO.output(motor_pin_d,GPIO.HIGH)
 	GPIO.output(motor_pin_a,GPIO.HIGH)
-	time.sleep(1.3)
+	time.sleep(1.7)
 	GPIO.output(motor_pin_d,GPIO.LOW)
 	GPIO.output(motor_pin_a,GPIO.LOW)
 
