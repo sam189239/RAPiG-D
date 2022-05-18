@@ -39,7 +39,7 @@ def get_gyro():
     _,_,_,wx,wy,wz = mpu6050_conv() # read and convert gyro data
     return wx,wy,wz
 
-def gyro_cal():
+def gyro_cal(cal_size):
     print("-"*50)
     print('Gyro Calibrating - Keep the IMU Steady')
     [get_gyro() for ii in range(0,cal_size)] # clear buffer before calibration
