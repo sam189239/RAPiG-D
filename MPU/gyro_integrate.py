@@ -71,7 +71,7 @@ if __name__ == '__main__':
         #
         gyro_labels = ['\omega_x','\omega_y','\omega_z'] # gyro labels for plots
         cal_size = 500 # points to use for calibration
-        gyro_offsets = gyro_cal() # calculate gyro offsets
+        gyro_offsets = gyro_cal(cal_size) # calculate gyro offsets
         #
         ###################################
         # Record new data 

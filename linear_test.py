@@ -45,7 +45,6 @@ def stop():
     
 def fwd():
     stop()
-
     GPIO.output(motor_pin_d, GPIO.HIGH)
     GPIO.output(motor_pin_c, GPIO.HIGH)
     GPIO.output(motor_pin_a, GPIO.LOW)
@@ -189,7 +188,13 @@ def move_one_f():
     fwd()
     time.sleep(1.5)
     stop()
-    time.sleep(3)
+
+    
+def move_one_b():
+    back()
+    time.sleep(1.5)
+    stop()
+
 
 def is_obstacle():
     global threshold
@@ -223,6 +228,7 @@ def main():
                 map.append("Empty")
                 print("Moving forward")
                 move_one_f_line()
+                time.sleep(3)
                 continue
         print("Completed")
         print(map)

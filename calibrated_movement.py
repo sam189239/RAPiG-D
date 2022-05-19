@@ -2,13 +2,14 @@ from MPU.mpu9250_i2c import *
 from linear_test import *
 from MPU.gyro_integrate import *
 
+angle_thresh = 84.2
+
 def get_gyro():
     _,_,_,wx,wy,wz = mpu6050_conv() # read and convert gyro data
     return wx,wy,wz
 
 def gyro_cal(cal_size):
     print("-"*50)
-    print('Gyro Calibrating - Keep the IMU Steady')
     [get_gyro() for ii in range(0,cal_size)] # clear buffer before calibration
     mpu_array = []
     gyro_offsets = [0.0,0.0,0.0]
@@ -24,7 +25,6 @@ def gyro_cal(cal_size):
             for qq in range(0,3):
                 gyro_offsets[qq] = np.mean(np.array(mpu_array)[:,qq]) # average
             break
-    print('Gyro Calibration Complete')
     return gyro_offsets
     
 def mpu6050_conv():
@@ -55,30 +55,13 @@ def mpu6050_conv():
 
     
 
-def main():
-
-    print("Initializing... ")
-    
-    ###################################
-    # Gyroscope Offset Calculation
-    ###################################
-    
-    gyro_labels = ['\omega_x','\omega_y','\omega_z'] # gyro labels for plots
-    cal_size = 500 # points to use for calibration
-    gyro_offsets = gyro_cal(cal_size) # calculate gyro offsets
-
-    # Turning
-    
+def left_mpu(gyro_offsets):   
     stop()
     angle = 0
-    rot_axis = 2 # axis being rotated (2 = z-axis)
-    
-    input("Press Enter to start turning left.")
-    
-
+    rot_axis = 2 # axis being rotated (2 = z-axis) 
     data,t_vec = [],[]
     t0 = time.time()
-    while angle<85.0:
+    while angle < angle_thresh:
         left()
         data.append(get_gyro())
         t_vec.append(time.time()-t0)
@@ -89,12 +72,49 @@ def main():
         except:
             pass
     stop()
-    print("Turn completed")
 
-    print("Angle turned: {0:2.2f} degrees".format(angle))
+def right_mpu(gyro_offsets):   
+    stop()
+    angle = 0
+    rot_axis = 2 # axis being rotated (2 = z-axis) 
+    data,t_vec = [],[]
+    t0 = time.time()
+    while angle > -angle_thresh:
+        right()
+        data.append(get_gyro())
+        t_vec.append(time.time()-t0)
+        data_offseted = np.array(data)[:,rot_axis]-gyro_offsets[rot_axis]
+        integ1_array = cumtrapz(data_offseted,x=t_vec) # integrate once in time
+        try:
+            angle = integ1_array[-1]
+        except:
+            pass
+    stop()
 
-
-        
+def main():
+	
+    print("Calibarating...")
+    gyro_labels = ['\omega_x','\omega_y','\omega_z'] # gyro labels for plots
+    cal_size = 500 # points to use for calibration
+    gyro_offsets = gyro_cal(cal_size) # calculate gyro offsets
+    
+    print('Initialized.')
+    
+    while True:
+        i = input()
+        if i == '1':
+            stop()
+        elif i == '2':
+            move_one_f()
+        elif i == '3':
+            move_one_b()
+        elif i == '4':
+            left_mpu(gyro_offsets)
+        elif i == '5':
+            right_mpu(gyro_offsets)
+        else:
+            break
+    print('Done')
         
 if __name__ == '__main__':
     main()
