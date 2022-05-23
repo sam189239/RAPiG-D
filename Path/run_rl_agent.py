@@ -12,10 +12,33 @@
 
 
 # Importing classes
-from env import Environment
-from agent_brain import QLearningTable 
+from env_rl import Environment
+from rl_agent_brain import QLearningTable 
+from calibrated_movement import *
 
+n_episodes = 40
 
+action_angle = {'up':0, 'down':180, 'left':270, 'right':90}
+
+gyro_offsets = mpu_intialize()
+
+def turn_required(action, current_facing):
+    reqd_facing = action_angle[action]
+    i = (current_facing - reqd_facing) / 90    
+    if i == 0:
+        pass
+    elif i>0:
+        while i>0:
+            left_mpu(gyro_offsets)
+            i -= 1
+            current_facing = reqd_facing
+    else:
+        while i<0:
+            right_mpu(gyro_offsets)      
+            i += 1
+            current_facing = reqd_facing
+    return current_facing
+    
 def update():
     # Resulted list for the plotting Episodes via Steps
     steps = []
@@ -23,7 +46,7 @@ def update():
     # Summed costs for all episodes in resulted list
     all_costs = []
 
-    for episode in range(40):
+    for episode in range(n_episodes):
         # Initial Observation
         observation = env.reset()
 
@@ -32,14 +55,18 @@ def update():
 
         # Updating the cost for each episode
         cost = 0
-
+        
+        current_facing = 180
+        
         while True:
             # Refreshing environment
             env.render()
 
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
-
+            
+            current_facing = turn_required(action, current_facing)
+                        
             # RL takes an action and get the next observation and reward
             observation_, reward, done = env.step(action)
 
