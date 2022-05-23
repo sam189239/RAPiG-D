@@ -1,3 +1,5 @@
+import sys
+sys.path.append("../")
 from MPU.mpu9250_i2c import *
 from linear_test import *
 from MPU.gyro_integrate import *

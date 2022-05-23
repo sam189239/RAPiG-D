@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import freenect
 import cv2
-from STEREO_CAM.demo import frame_convert2
+from Kinect.demo import frame_convert2
 import numpy as np
 import time
 import datetime as dt

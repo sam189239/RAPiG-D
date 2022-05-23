@@ -21,8 +21,8 @@ flag_coord = flag_pos * pixels
 obs_visited = []
 
 def create_obs(self,next_state):
-    #pos = obs_pos[next_state[0] / pixels, next_state[1] / pixels] - 1
-    img = self.obstacle_object[1]
+    pos = obs_pos[next_state[0] / pixels, next_state[1] / pixels] - 1
+    img = self.obstacle_object[pos]
     self.obstacle.append(self.canvas_widget.create_image(next_state[0], next_state[1], anchor='nw', image=img))
 
 

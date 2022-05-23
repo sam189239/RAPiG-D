@@ -20,7 +20,7 @@ n_episodes = 40
 
 action_angle = {'up':0, 'down':180, 'left':270, 'right':90}
 
-gyro_offsets = mpu_intialize()
+gyro_offsets = mpu_initialize()
 
 def turn_required(action, current_facing):
     reqd_facing = action_angle[action]
@@ -65,7 +65,7 @@ def update():
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
             
-            current_facing = turn_required(action, current_facing)
+            #current_facing = turn_required(action, current_facing)
                         
             # RL takes an action and get the next observation and reward
             observation_, reward, done = env.step(action)
