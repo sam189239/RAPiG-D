@@ -3,11 +3,15 @@ import numpy as np  # To deal with data in form of matrices
 import tkinter as tk  # To build GUI
 import time  # Time is needed to slow down the agent and to see how he runs
 from PIL import Image, ImageTk  # For adding images into the canvas widget
+import sys
+sys.path.append("../")
+from linear_test import *
+
 
 # Setting the sizes for the environment
 pixels = 40   # pixels
-env_height = 4  # grid height
-env_width = 4 # grid width
+env_height = 3  # grid height
+env_width = 3 # grid width
 
 # Global variable for dictionary with coordinates for the final route
 a = {}
@@ -15,10 +19,25 @@ a = {}
 
 obs_coord = []
 obs_pos = {(1,1):0, (0,2):1}
-flag_pos = [3,3]
+flag_pos = [2,2]
 flag_coord = flag_pos * pixels
 
 obs_visited = []
+
+def move_one_f():
+    input("moving one forward, press enter to continue")
+    
+def is_obstacle():
+    global threshold
+    global current_depth
+
+    depth, timestamp = freenect.sync_get_depth()
+    depth = 255 * np.logical_and(depth >= 0,
+                                 depth <= current_depth + threshold)
+    depth = depth.astype(np.uint8)
+    depth = cv2.cvtColor(depth, cv2.COLOR_GRAY2RGB)
+
+    is_obj = check_if_object(depth)
 
 def create_obs(self,next_state):
     pos = obs_pos[next_state[0] / pixels, next_state[1] / pixels] - 1
@@ -96,7 +115,7 @@ class Environment(tk.Tk, object):
     def reset(self):
         self.update()
         #time.sleep(0.1)
-
+        input("Reset bot and press enter... ")
         # Updating agent
         self.canvas_widget.delete(self.agent)
         self.agent = self.canvas_widget.create_image(0, 0, anchor='nw', image=self.robot)
@@ -107,14 +126,110 @@ class Environment(tk.Tk, object):
 
         # Return observation
         return self.canvas_widget.coords(self.agent)
-
-    # Function to get the next observation and reward by doing next step
+        
     def step(self, action):
         # Current state of the agent
         state = self.canvas_widget.coords(self.agent)
         base_action = np.array([0, 0])
+        
+        obs = is_obstacle()
+        
+        # Action 'up'
+        if action == 0:
+            if state[1] >= pixels:
+                base_action[1] -= pixels
+        # Action 'down'
+        elif action == 1:
+            if state[1] < (env_height - 1) * pixels:
+                base_action[1] += pixels
+        # Action right
+        elif action == 2:
+            if state[0] < (env_width - 1) * pixels:
+                base_action[0] += pixels
+        # Action left
+        elif action == 3:
+            if state[0] >= pixels:
+                base_action[0] -= pixels
+                
+        # Moving the agent according to the action
+        self.canvas_widget.move(self.agent, base_action[0], base_action[1])
+	
+        next_posn = state + base_action
+	
 
-        # Updating next state according to the action
+        # Calculating the reward for the agent
+        if not obs and next_posn == self.canvas_widget.coords(self.flag):
+            reward = 1
+            done = True
+            next_state = 'goal'
+
+            # move and update dict
+            move_one_f()
+            self.d[self.i] = self.canvas_widget.coords(self.agent)
+        
+            # Updating next state
+            #next_state = self.d[self.i]
+
+            # Updating key for the dictionary
+            self.i += 1
+           
+            # Filling the dictionary first time
+            if self.c == True:
+                for j in range(len(self.d)):
+                    self.f[j] = self.d[j]
+                self.c = False
+                self.longest = len(self.d)
+                self.shortest = len(self.d)
+
+            # Checking if the currently found route is shorter
+            if len(self.d) < len(self.f):
+                # Saving the number of steps for the shortest route
+                self.shortest = len(self.d)
+                # Clearing the dictionary for the final route
+                self.f = {}
+                # Reassigning the dictionary
+                for j in range(len(self.d)):
+                    self.f[j] = self.d[j]
+
+            # Saving the number of steps for the longest route
+            if len(self.d) > self.longest:
+                self.longest = len(self.d)
+
+        elif obs:
+            if next_posn not in obs_visited:
+                create_obs(self, next_posn)
+                obs_visited.append(next_posn)
+            
+            self.canvas_widget.move(self.agent, -base_action[0], -base_action[1])
+            
+            reward = -1
+            done = True
+            next_state = 'obstacle'
+
+            # Clearing the dictionary and the i
+            self.d = {}
+            self.i = 0
+
+        else:
+            
+            # move and update dict
+            move_one_f()
+            self.d[self.i] = self.canvas_widget.coords(self.agent)
+            self.i += 1
+            next_state = next_posn
+            reward = 0
+            done = False
+
+        return next_state, reward, done
+
+    # Function to get the next observation and reward by doing next step
+    def step_old(self, action):
+        # Current state of the agent
+        state = self.canvas_widget.coords(self.agent)
+        base_action = np.array([0, 0])
+
+        # Updating next state according to the action            
+        
         # Action 'up'
         if action == 0:
             if state[1] >= pixels:

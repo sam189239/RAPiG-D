@@ -21,8 +21,8 @@ from PIL import Image, ImageTk  # For adding images into the canvas widget
 
 # Setting the sizes for the environment
 pixels = 40   # pixels
-env_height = 4  # grid height
-env_width = 4  # grid width
+env_height = 3  # grid height
+env_width = 3  # grid width
 
 # Global variable for dictionary with coordinates for the final route
 a = {}
@@ -32,7 +32,7 @@ obs_coord = []
 #            (5,6):4, (5,7):4, (0,8):3, (3,7):8, (0,4):1, (8,0):3, (7,7):4, (1,6):11, (8,3):8, (7,6):4, (7,5):4, (2,3):2
 #        }
 obs_pos = { (1,1):2, (0,2):2}
-flag_pos = [3,3]
+flag_pos = [2,2]
 flag_coord = flag_pos * pixels
 
 obs_visited = []

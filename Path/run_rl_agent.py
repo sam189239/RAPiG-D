@@ -16,9 +16,9 @@ from env_rl import Environment
 from rl_agent_brain import QLearningTable 
 from calibrated_movement import *
 
-n_episodes = 40
+n_episodes = 10
 
-action_angle = {'up':0, 'down':180, 'left':270, 'right':90}
+action_angle = [0, 180, 90, 270] # up, down, right, left
 
 gyro_offsets = mpu_initialize()
 
@@ -65,7 +65,9 @@ def update():
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
             
-            #current_facing = turn_required(action, current_facing)
+            current_facing = turn_required(action, current_facing)
+            
+            print("Turned " + str(action))
                         
             # RL takes an action and get the next observation and reward
             observation_, reward, done = env.step(action)
