@@ -6,6 +6,7 @@ from PIL import Image, ImageTk  # For adding images into the canvas widget
 import sys
 sys.path.append("../")
 from linear_test import *
+from calibrated_movement import *
 
 
 # Setting the sizes for the environment
@@ -32,7 +33,7 @@ action_angle = [0, 180, 90, 270] # up, down, right, left
 def move_one_f():
     input("Moved one forward, press enter to continue")
 
-def turn_required(action, current_facing):
+def turn_required(action, current_facing, gyro_offsets):
     reqd_facing = action_angle[action]
     i = (current_facing - reqd_facing) / 90    
     if i == 0:
@@ -150,7 +151,7 @@ class Environment(tk.Tk, object):
         # Return observation
         return self.canvas_widget.coords(self.agent)
         
-    def step(self, action, current_facing):
+    def step(self, action, current_facing,  gyro_offsets):
         # Current state of the agent
         state = self.canvas_widget.coords(self.agent)
         base_action = np.array([0, 0])
@@ -161,25 +162,25 @@ class Environment(tk.Tk, object):
         if action == 0:
             if state[1] >= pixels:
                 base_action[1] -= pixels
-                current_facing = turn_required(action, current_facing)
+                current_facing = turn_required(action, current_facing, gyro_offsets)
                 print("Turned " + actions[action])
         # Action 'down'
         elif action == 1:
             if state[1] < (env_height - 1) * pixels:
                 base_action[1] += pixels
-                current_facing = turn_required(action, current_facing)
+                current_facing = turn_required(action, current_facing, gyro_offsets)
                 print("Turned " + actions[action])
         # Action right
         elif action == 2:
             if state[0] < (env_width - 1) * pixels:
                 base_action[0] += pixels
-                current_facing = turn_required(action, current_facing)
+                current_facing = turn_required(action, current_facing, gyro_offsets)
                 print("Turned " + actions[action])
         # Action left
         elif action == 3:
             if state[0] >= pixels:
                 base_action[0] -= pixels
-                current_facing = turn_required(action, current_facing)
+                current_facing = turn_required(action, current_facing, gyro_offsets)
                 print("Turned " + actions[action])
                 
         # Moving the agent according to the action

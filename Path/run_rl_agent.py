@@ -68,7 +68,7 @@ def update():
             
                                     
             # RL takes an action and get the next observation and reward
-            observation_, reward, done, current_facing = env.step(action, current_facing)
+            observation_, reward, done, current_facing = env.step(action, current_facing, gyro_offsets)
 
             # RL learns from this transition and calculating the cost
             cost += RL.learn(str(observation), action, reward, str(observation_))

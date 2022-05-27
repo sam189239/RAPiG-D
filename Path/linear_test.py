@@ -191,6 +191,12 @@ def move_one_f():
     stop()
     time.sleep(3)
 
+def move_one_b():
+    back()
+    time.sleep(1.5)
+    stop()
+    time.sleep(3)
+    
 def is_obstacle():
     global threshold
     global current_depth
