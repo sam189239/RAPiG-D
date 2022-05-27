@@ -5,7 +5,7 @@ from agent_brain_test import QLearningTable
 import warnings
 
 warnings.filterwarnings("ignore")
-n_episodes = 20
+n_episodes = 10
 
 action_angle = [0, 180, 90, 270] # up, down, right, left
 actions = ['up', 'down', 'right', 'left']
@@ -27,9 +27,6 @@ def turn_required(action, current_facing):
             i += 1
             current_facing = reqd_facing
     return current_facing
-
-def turn_valid():
-    return True
 
 def update():
     # Resulted list for the plotting Episodes via Steps

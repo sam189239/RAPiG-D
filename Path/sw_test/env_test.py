@@ -10,8 +10,8 @@ sys.path.append("../")
 
 # Setting the sizes for the environment
 pixels = 40   # pixels
-env_height = 4  # grid height
-env_width = 4 # grid width
+env_height = 3  # grid height
+env_width = 3 # grid width
 
 # Global variable for dictionary with coordinates for the final route
 a = {}
@@ -19,7 +19,7 @@ a = {}
 
 obs_coord = []
 obs_pos = {(2,0):1, (0,2):1}
-flag_pos = [3,3]
+flag_pos = [2,2]
 flag_coord = flag_pos * pixels
 
 for (x,y) in obs_pos.keys():
@@ -28,8 +28,6 @@ for (x,y) in obs_pos.keys():
 obs_visited = []
 actions = ['up', 'down', 'right', 'left']
 action_angle = [0, 180, 90, 270] # up, down, right, left
-
-
 
 def move_one_f():
     input("Moved one forward, press enter to continue")
@@ -187,7 +185,6 @@ class Environment(tk.Tk, object):
         # Moving the agent according to the action
         self.canvas_widget.move(self.agent, base_action[0], base_action[1])
 	
-        ## next_posn = state + base_action
         next_posn = self.canvas_widget.coords(self.agent)
 
         # Calculating the reward for the agent

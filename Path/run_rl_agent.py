@@ -15,11 +15,12 @@
 from env_rl import Environment
 from rl_agent_brain import QLearningTable 
 from calibrated_movement import *
-
+import warnings
+warnings.filterwarnings("ignore")
 n_episodes = 10
 
 action_angle = [0, 180, 90, 270] # up, down, right, left
-
+actions = ['up', 'down', 'right', 'left']
 gyro_offsets = mpu_initialize()
 
 def turn_required(action, current_facing):
@@ -65,12 +66,9 @@ def update():
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
             
-            current_facing = turn_required(action, current_facing)
-            
-            print("Turned " + str(action))
-                        
+                                    
             # RL takes an action and get the next observation and reward
-            observation_, reward, done = env.step(action)
+            observation_, reward, done, current_facing = env.step(action, current_facing)
 
             # RL learns from this transition and calculating the cost
             cost += RL.learn(str(observation), action, reward, str(observation_))

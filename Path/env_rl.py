@@ -22,11 +22,34 @@ obs_pos = {(1,1):0, (0,2):1}
 flag_pos = [2,2]
 flag_coord = flag_pos * pixels
 
+for (x,y) in obs_pos.keys():
+    obs_coord.append([x * pixels, y * pixels])
+
 obs_visited = []
+actions = ['up', 'down', 'right', 'left']
+action_angle = [0, 180, 90, 270] # up, down, right, left
 
 def move_one_f():
-    input("moving one forward, press enter to continue")
-    
+    input("Moved one forward, press enter to continue")
+
+def turn_required(action, current_facing):
+    reqd_facing = action_angle[action]
+    i = (current_facing - reqd_facing) / 90    
+    if i == 0:
+        pass
+    elif i>0:
+        while i>0:
+            left_mpu(gyro_offsets)
+            i -= 1
+            current_facing = reqd_facing
+    else:
+        while i<0:
+            right_mpu(gyro_offsets)      
+            i += 1
+            current_facing = reqd_facing
+    return current_facing   
+
+
 def is_obstacle():
     global threshold
     global current_depth
@@ -96,7 +119,7 @@ class Environment(tk.Tk, object):
         img_obstacle3 = Image.open("images/tree2.png")
         self.obstacle_object.append(ImageTk.PhotoImage(img_obstacle3))
         
-        # self.obstacle = []
+        self.obstacle = []
 
         # Final Point
         img_flag = Image.open("images/flag.png")
@@ -127,7 +150,7 @@ class Environment(tk.Tk, object):
         # Return observation
         return self.canvas_widget.coords(self.agent)
         
-    def step(self, action):
+    def step(self, action, current_facing):
         # Current state of the agent
         state = self.canvas_widget.coords(self.agent)
         base_action = np.array([0, 0])
@@ -138,30 +161,39 @@ class Environment(tk.Tk, object):
         if action == 0:
             if state[1] >= pixels:
                 base_action[1] -= pixels
+                current_facing = turn_required(action, current_facing)
+                print("Turned " + actions[action])
         # Action 'down'
         elif action == 1:
             if state[1] < (env_height - 1) * pixels:
                 base_action[1] += pixels
+                current_facing = turn_required(action, current_facing)
+                print("Turned " + actions[action])
         # Action right
         elif action == 2:
             if state[0] < (env_width - 1) * pixels:
                 base_action[0] += pixels
+                current_facing = turn_required(action, current_facing)
+                print("Turned " + actions[action])
         # Action left
         elif action == 3:
             if state[0] >= pixels:
                 base_action[0] -= pixels
+                current_facing = turn_required(action, current_facing)
+                print("Turned " + actions[action])
                 
         # Moving the agent according to the action
         self.canvas_widget.move(self.agent, base_action[0], base_action[1])
 	
-        next_posn = state + base_action
-	
+        next_posn = self.canvas_widget.coords(self.agent)
 
         # Calculating the reward for the agent
         if not obs and next_posn == self.canvas_widget.coords(self.flag):
             reward = 1
             done = True
             next_state = 'goal'
+            
+            print("Goal Reached")
 
             # move and update dict
             move_one_f()
@@ -196,11 +228,13 @@ class Environment(tk.Tk, object):
                 self.longest = len(self.d)
 
         elif obs:
+            self.canvas_widget.move(self.agent, -base_action[0], -base_action[1])
+            
             if next_posn not in obs_visited:
                 create_obs(self, next_posn)
                 obs_visited.append(next_posn)
             
-            self.canvas_widget.move(self.agent, -base_action[0], -base_action[1])
+            print("Obstacle detected")            
             
             reward = -1
             done = True
@@ -211,16 +245,16 @@ class Environment(tk.Tk, object):
             self.i = 0
 
         else:
-            
-            # move and update dict
-            move_one_f()
-            self.d[self.i] = self.canvas_widget.coords(self.agent)
-            self.i += 1
+            if state != next_posn:
+                # move and update dict
+                move_one_f()
+                self.d[self.i] = self.canvas_widget.coords(self.agent)
+                self.i += 1
             next_state = next_posn
             reward = 0
             done = False
 
-        return next_state, reward, done
+        return next_state, reward, done, current_facing
 
     # Function to get the next observation and reward by doing next step
     def step_old(self, action):
