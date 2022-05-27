@@ -1,25 +1,14 @@
-# File: run_agent.py
-# Description: Running algorithm
-# Environment: PyCharm and Anaconda environment
-#
-# MIT License
-# Copyright (c) 2018 Valentyn N Sichkar
-# github.com/sichkar-valentyn
-#
-# Reference to:
-# Valentyn N Sichkar. Reinforcement Learning Algorithms for global path planning // GitHub platform. DOI: 10.5281/zenodo.1317899
-
-
-
 # Importing classes
 from env_test import Environment
 from agent_brain_test import QLearningTable 
 ## from calibrated_movement import *
+import warnings
 
-n_episodes = 10
+warnings.filterwarnings("ignore")
+n_episodes = 20
 
 action_angle = [0, 180, 90, 270] # up, down, right, left
-
+actions = ['up', 'down', 'right', 'left']
 ## gyro_offsets = mpu_initialize()
 
 def turn_required(action, current_facing):
@@ -38,7 +27,10 @@ def turn_required(action, current_facing):
             i += 1
             current_facing = reqd_facing
     return current_facing
-    
+
+def turn_valid():
+    return True
+
 def update():
     # Resulted list for the plotting Episodes via Steps
     steps = []
@@ -65,12 +57,12 @@ def update():
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
             
-            ## current_facing = turn_required(action, current_facing)
-            
-            print("Turned " + str(action))
+            # if turn_valid():
+                # current_facing = turn_required(action, current_facing)
+                # print("Turned " + actions[action])
                         
             # RL takes an action and get the next observation and reward
-            observation_, reward, done = env.step(action)
+            observation_, reward, done, current_facing = env.step(action, current_facing)
 
             # RL learns from this transition and calculating the cost
             cost += RL.learn(str(observation), action, reward, str(observation_))
