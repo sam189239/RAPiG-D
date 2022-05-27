@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 # Importing function from the env.py
-from env import final_states
+from env_test import final_states
 
 
 # Creating class for the Q-learning table
