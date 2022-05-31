@@ -50,6 +50,10 @@ def turn_required(action, current_facing, gyro_offsets):
             current_facing = reqd_facing
     return current_facing   
 
+def check_if_object(frame):
+    area = int((1 - 2*roi_val) * height * (1 - 2*roi_val) * width)
+    pixels = int(np.sum(frame[ROI[0][1]:ROI[1][1], ROI[0][0]:ROI[1][0], 0]) / 255)
+    return pixels > (area * alert_thresh)
 
 def is_obstacle():
     global threshold
@@ -64,8 +68,8 @@ def is_obstacle():
     is_obj = check_if_object(depth)
 
 def create_obs(self,next_state):
-    pos = obs_pos[next_state[0] / pixels, next_state[1] / pixels] - 1
-    img = self.obstacle_object[pos]
+    # pos = obs_pos[next_state[0] / pixels, next_state[1] / pixels] - 1
+    img = self.obstacle_object[1]
     self.obstacle.append(self.canvas_widget.create_image(next_state[0], next_state[1], anchor='nw', image=img))
 
 
@@ -162,26 +166,30 @@ class Environment(tk.Tk, object):
         if action == 0:
             if state[1] >= pixels:
                 base_action[1] -= pixels
-                current_facing = turn_required(action, current_facing, gyro_offsets)
-                print("Turned " + actions[action])
+                # current_facing = turn_required(action, current_facing, gyro_offsets)
+                current_facing = action_angle[action]
+                input("Turned " + actions[action])
         # Action 'down'
         elif action == 1:
             if state[1] < (env_height - 1) * pixels:
                 base_action[1] += pixels
-                current_facing = turn_required(action, current_facing, gyro_offsets)
-                print("Turned " + actions[action])
+                # current_facing = turn_required(action, current_facing, gyro_offsets)
+                current_facing = action_angle[action]
+                input("Turned " + actions[action])
         # Action right
         elif action == 2:
             if state[0] < (env_width - 1) * pixels:
                 base_action[0] += pixels
-                current_facing = turn_required(action, current_facing, gyro_offsets)
-                print("Turned " + actions[action])
+                # current_facing = turn_required(action, current_facing, gyro_offsets)
+                current_facing = action_angle[action]
+                input("Turned " + actions[action])
         # Action left
         elif action == 3:
             if state[0] >= pixels:
                 base_action[0] -= pixels
-                current_facing = turn_required(action, current_facing, gyro_offsets)
-                print("Turned " + actions[action])
+                # current_facing = turn_required(action, current_facing, gyro_offsets)
+                current_facing = action_angle[action]
+                input("Turned " + actions[action])
                 
         # Moving the agent according to the action
         self.canvas_widget.move(self.agent, base_action[0], base_action[1])
