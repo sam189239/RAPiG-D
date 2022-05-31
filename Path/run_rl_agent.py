@@ -48,6 +48,7 @@ def update():
     all_costs = []
 
     for episode in range(n_episodes):
+        print("######## Episode: {} ########".format(episode+1))
         # Initial Observation
         observation = env.reset()
 
@@ -65,19 +66,20 @@ def update():
 
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
-            print(actions[action])
+            input("Action chosen: " + actions[action] + " Press Enter.")
                                     
             # RL takes an action and get the next observation and reward
-            observation_, reward, done, current_facing = env.step(action, current_facing, gyro_offsets)
+            observation_, reward, done, current_facing, valid = env.step(action, current_facing, gyro_offsets)
 
-            # RL learns from this transition and calculating the cost
-            cost += RL.learn(str(observation), action, reward, str(observation_))
+            if valid: 
+                # RL learns from this transition and calculating the cost
+                cost += RL.learn(str(observation), action, reward, str(observation_))
 
-            # Swapping the observations - current and next
-            observation = observation_
+                # Swapping the observations - current and next
+                observation = observation_
 
-            # Calculating number of Steps in the current Episode
-            i += 1
+                # Calculating number of Steps in the current Episode
+                i += 1
 
             # Break while loop when it is the end of current Episode
             # When agent reached the goal or obstacle

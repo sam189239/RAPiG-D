@@ -1,3 +1,5 @@
+import sys
+sys.path.append("../")
 import RPi.GPIO as GPIO
 import time
 import freenect

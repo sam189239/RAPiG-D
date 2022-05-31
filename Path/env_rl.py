@@ -23,6 +23,9 @@ obs_pos = {(1,1):0, (0,2):1}
 flag_pos = [2,2]
 flag_coord = flag_pos * pixels
 
+threshold = 150
+current_depth = 450
+
 for (x,y) in obs_pos.keys():
     obs_coord.append([x * pixels, y * pixels])
 
@@ -30,8 +33,8 @@ obs_visited = []
 actions = ['up', 'down', 'right', 'left']
 action_angle = [0, 180, 90, 270] # up, down, right, left
 
-def move_one_f():
-    input("Moved one forward, press enter to continue")
+#def move_one_f():
+#    input("Moved one forward, press enter to continue")
 
 def turn_required(action, current_facing, gyro_offsets):
     reqd_facing = action_angle[action]
@@ -55,17 +58,16 @@ def check_if_object(frame):
     pixels = int(np.sum(frame[ROI[0][1]:ROI[1][1], ROI[0][0]:ROI[1][0], 0]) / 255)
     return pixels > (area * alert_thresh)
 
+    
 def is_obstacle():
     global threshold
     global current_depth
 
     depth, timestamp = freenect.sync_get_depth()
-    depth = 255 * np.logical_and(depth >= 0,
-                                 depth <= current_depth + threshold)
+    depth = 255 * np.logical_and(depth >= 0, depth <= current_depth + threshold)
     depth = depth.astype(np.uint8)
-    depth = cv2.cvtColor(depth, cv2.COLOR_GRAY2RGB)
-
-    is_obj = check_if_object(depth)
+    depth = cv2.cvtColor(depth, cv2.COLOR_GRAY2RGB) 
+    return check_if_object(depth)
 
 def create_obs(self,next_state):
     # pos = obs_pos[next_state[0] / pixels, next_state[1] / pixels] - 1
@@ -160,111 +162,126 @@ class Environment(tk.Tk, object):
         state = self.canvas_widget.coords(self.agent)
         base_action = np.array([0, 0])
         
-        obs = is_obstacle()
-        
+        valid = False
         # Action 'up'
         if action == 0:
             if state[1] >= pixels:
                 base_action[1] -= pixels
-                # current_facing = turn_required(action, current_facing, gyro_offsets)
-                current_facing = action_angle[action]
-                input("Turned " + actions[action])
+                valid = True
+                current_facing = turn_required(action, current_facing, gyro_offsets)
+                #current_facing = action_angle[action]
+                print("Turned " + actions[action])
         # Action 'down'
         elif action == 1:
             if state[1] < (env_height - 1) * pixels:
                 base_action[1] += pixels
-                # current_facing = turn_required(action, current_facing, gyro_offsets)
-                current_facing = action_angle[action]
-                input("Turned " + actions[action])
+                valid = True
+                current_facing = turn_required(action, current_facing, gyro_offsets)
+                # current_facing = action_angle[action]
+                print("Turned " + actions[action])
         # Action right
         elif action == 2:
             if state[0] < (env_width - 1) * pixels:
                 base_action[0] += pixels
-                # current_facing = turn_required(action, current_facing, gyro_offsets)
-                current_facing = action_angle[action]
-                input("Turned " + actions[action])
+                valid = True
+                current_facing = turn_required(action, current_facing, gyro_offsets)
+                # current_facing = action_angle[action]
+                print("Turned " + actions[action])
         # Action left
         elif action == 3:
             if state[0] >= pixels:
                 base_action[0] -= pixels
-                # current_facing = turn_required(action, current_facing, gyro_offsets)
-                current_facing = action_angle[action]
-                input("Turned " + actions[action])
-                
-        # Moving the agent according to the action
-        self.canvas_widget.move(self.agent, base_action[0], base_action[1])
-	
-        next_posn = self.canvas_widget.coords(self.agent)
-
-        # Calculating the reward for the agent
-        if not obs and next_posn == self.canvas_widget.coords(self.flag):
-            reward = 1
-            done = True
-            next_state = 'goal'
-            
-            print("Goal Reached")
-
-            # move and update dict
-            move_one_f()
-            self.d[self.i] = self.canvas_widget.coords(self.agent)
+                valid = True
+                current_facing = turn_required(action, current_facing, gyro_offsets)
+                # current_facing = action_angle[action]
+                print("Turned " + actions[action])
         
-            # Updating next state
-            #next_state = self.d[self.i]
-
-            # Updating key for the dictionary
-            self.i += 1
-           
-            # Filling the dictionary first time
-            if self.c == True:
-                for j in range(len(self.d)):
-                    self.f[j] = self.d[j]
-                self.c = False
-                self.longest = len(self.d)
-                self.shortest = len(self.d)
-
-            # Checking if the currently found route is shorter
-            if len(self.d) < len(self.f):
-                # Saving the number of steps for the shortest route
-                self.shortest = len(self.d)
-                # Clearing the dictionary for the final route
-                self.f = {}
-                # Reassigning the dictionary
-                for j in range(len(self.d)):
-                    self.f[j] = self.d[j]
-
-            # Saving the number of steps for the longest route
-            if len(self.d) > self.longest:
-                self.longest = len(self.d)
-
-        elif obs:
-            self.canvas_widget.move(self.agent, -base_action[0], -base_action[1])
-            
-            if next_posn not in obs_visited:
-                create_obs(self, next_posn)
-                obs_visited.append(next_posn)
-            
-            print("Obstacle detected")            
-            
-            reward = -1
-            done = True
-            next_state = 'obstacle'
-
-            # Clearing the dictionary and the i
-            self.d = {}
-            self.i = 0
-
-        else:
-            if state != next_posn:
+        
+        if valid:
+            time.sleep(1)     
+            print("Checking for obstacle... ", end = "")
+            time.sleep(0.5)
+            obs = is_obstacle()
+            print(obs)   
+        
+            # Moving the agent according to the action
+            self.canvas_widget.move(self.agent, base_action[0], base_action[1])
+	
+	
+            next_posn = self.canvas_widget.coords(self.agent)
+    
+            # Calculating the reward for the agent
+            if not obs and next_posn == self.canvas_widget.coords(self.flag):
+                reward = 1
+                done = True
+                next_state = 'goal'
+                
+                print("Goal Reached")
+    
                 # move and update dict
                 move_one_f()
                 self.d[self.i] = self.canvas_widget.coords(self.agent)
+            
+                # Updating next state
+                #next_state = self.d[self.i]
+    
+                # Updating key for the dictionary
                 self.i += 1
-            next_state = next_posn
-            reward = 0
+               
+                # Filling the dictionary first time
+                if self.c == True:
+                    for j in range(len(self.d)):
+                        self.f[j] = self.d[j]
+                    self.c = False
+                    self.longest = len(self.d)
+                    self.shortest = len(self.d)
+    
+                # Checking if the currently found route is shorter
+                if len(self.d) < len(self.f):
+                    # Saving the number of steps for the shortest route
+                    self.shortest = len(self.d)
+                    # Clearing the dictionary for the final route
+                    self.f = {}
+                    # Reassigning the dictionary
+                    for j in range(len(self.d)):
+                        self.f[j] = self.d[j]
+    
+                # Saving the number of steps for the longest route
+                if len(self.d) > self.longest:
+                    self.longest = len(self.d)
+    
+            elif obs:
+                self.canvas_widget.move(self.agent, -base_action[0], -base_action[1])
+                
+                if next_posn not in obs_visited:
+                    create_obs(self, next_posn)
+                    obs_visited.append(next_posn)
+                
+                print("Obstacle detected")            
+                
+                reward = -1
+                done = True
+                next_state = 'obstacle'
+    
+                # Clearing the dictionary and the i
+                self.d = {}
+                self.i = 0
+    
+            else:
+                if state != next_posn:
+                    # move and update dict
+                    move_one_f()
+                    self.d[self.i] = self.canvas_widget.coords(self.agent)
+                    self.i += 1
+                next_state = next_posn
+                reward = 0
+                done = False
+        else:
+            next_state = state
             done = False
-
-        return next_state, reward, done, current_facing
-
+            reward = 0 
+        return next_state, reward, done, current_facing, valid
+    
     # Function to get the next observation and reward by doing next step
     def step_old(self, action):
         # Current state of the agent
