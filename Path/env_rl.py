@@ -198,9 +198,8 @@ class Environment(tk.Tk, object):
         
         
         if valid:
-            time.sleep(1)     
+            time.sleep(0.5)     
             print("Checking for obstacle... ", end = "")
-            time.sleep(0.5)
             obs = is_obstacle()
             print(obs)   
         
