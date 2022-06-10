@@ -189,13 +189,13 @@ def move_one_f_line():
 
 def move_one_f():
     fwd()
-    time.sleep(1.5)
+    time.sleep(1.32)
     stop()
     time.sleep(3)
 
 def move_one_b():
     back()
-    time.sleep(1.5)
+    time.sleep(1.32)
     stop()
     time.sleep(3)
     
