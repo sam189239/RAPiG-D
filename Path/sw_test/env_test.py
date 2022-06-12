@@ -7,6 +7,11 @@ import sys
 sys.path.append("../")
 # from linear_test import *
 
+import requests
+def send_to_flask(step, episode, m, action):
+    data = {'step':step, 'ep':episode, 'map':m, 'action':action}
+    r = requests.post("http://localhost:8000", data = data)
+    
 
 # Setting the sizes for the environment
 pixels = 40   # pixels
@@ -30,7 +35,7 @@ actions = ['up', 'down', 'right', 'left']
 action_angle = [0, 180, 90, 270] # up, down, right, left
 
 def move_one_f():
-    input("Moved one forward, press enter to continue")
+    print("Moved one forward")
 
 def turn_required(action, current_facing):
     reqd_facing = action_angle[action]

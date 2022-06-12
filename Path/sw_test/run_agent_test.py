@@ -3,9 +3,16 @@ from env_test import Environment
 from agent_brain_test import QLearningTable 
 ## from calibrated_movement import *
 import warnings
+import requests
 
 warnings.filterwarnings("ignore")
 n_episodes = 10
+
+
+def send_to_flask(step, episode, m, action):
+    data = {'step':step, 'ep':episode, 'map':m, 'action':action}
+    r = requests.post("http://localhost:8000", data = data)
+    
 
 action_angle = [0, 180, 90, 270] # up, down, right, left
 actions = ['up', 'down', 'right', 'left']
@@ -35,6 +42,7 @@ def update():
     # Summed costs for all episodes in resulted list
     all_costs = []
 
+    m = [0,0,0,0,0,0,0,0,0]
     for episode in range(n_episodes):
         # Initial Observation
         observation = env.reset()
@@ -53,7 +61,15 @@ def update():
 
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
+
+            try:
+                send_to_flask(step = i, episode = episode, m = m, action = str(actions[action]) + " chosen, press Enter")
+            except:
+                print("not sent")
+                pass
             
+            input(str(actions[action]) + " chosen, press Enter")
+
             # if turn_valid():
                 # current_facing = turn_required(action, current_facing)
                 # print("Turned " + actions[action])
