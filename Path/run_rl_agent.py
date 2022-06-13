@@ -18,6 +18,11 @@ from calibrated_movement import *
 import warnings
 warnings.filterwarnings("ignore")
 n_episodes = 10
+import requests
+
+def send_to_flask(step, episode, m, action):
+    data = {'step':step, 'ep':episode, 'map':m, 'action':action}
+    r = requests.post("http://localhost:8000", data = data)
 
 action_angle = [0, 180, 90, 270] # up, down, right, left
 actions = ['up', 'down', 'right', 'left']
@@ -46,7 +51,8 @@ def update():
 
     # Summed costs for all episodes in resulted list
     all_costs = []
-
+    
+    m = [0,0,0,0,0,0,0,0,0]
     for episode in range(n_episodes):
         print("######## Episode: {} ########".format(episode+1))
         # Initial Observation
@@ -60,12 +66,19 @@ def update():
         
         current_facing = 180
         
+        
         while True:
             # Refreshing environment
             env.render()
 
             # RL chooses action based on observation
-            action = RL.choose_action(str(observation))
+            action = RL.choose_action(str(observation), env)
+            
+            try:
+                send_to_flask(step = i, episode = episode, m = m, action = str(actions[action]) + " chosen, press Enter")
+            except:
+                print("not sent")
+                pass
             input("Action chosen: " + actions[action] + " Press Enter.")
                                     
             # RL takes an action and get the next observation and reward

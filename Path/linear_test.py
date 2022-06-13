@@ -14,7 +14,7 @@ threshold = 150
 current_depth = 450
 height = 480
 width = 640
-roi_val = 0.25
+roi_val = 0.15
 
 ROI = [(int(width * roi_val), int(height * roi_val)), (int(width * (1-roi_val)), int(height * (1-roi_val)))]
 

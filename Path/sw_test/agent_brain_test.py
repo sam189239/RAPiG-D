@@ -108,12 +108,12 @@ class QLearningTable:
 
         plt.tight_layout()  # Function to make distance between figures
 
-        #
-        # plt.figure()
-        # plt.plot(np.arange(len(steps)), steps, 'b')
-        # plt.title('Episode via steps')
-        # plt.xlabel('Episode')
-        # plt.ylabel('Steps')
+        
+        plt.figure()
+        plt.plot(np.arange(len(steps)), steps, 'b')
+        plt.title('Episode via steps')
+        plt.xlabel('Episode')
+        plt.ylabel('Steps')
 
         #
         # plt.figure()

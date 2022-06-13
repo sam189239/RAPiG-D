@@ -23,7 +23,7 @@ a = {}
 
 
 obs_coord = []
-obs_pos = {(2,0):1, (0,2):1}
+obs_pos = {(2,1):2, (0,1):2}
 flag_pos = [2,2]
 flag_coord = flag_pos * pixels
 

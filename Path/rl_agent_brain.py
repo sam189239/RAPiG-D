@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 # Importing function from the env.py
 from env_rl import final_states
 
+# Setting the sizes for the environment
+pixels = 40   # pixels
+env_height = 3  # grid height
+env_width = 3 # grid width
 
 # Creating class for the Q-learning table
 class QLearningTable:
@@ -23,7 +27,7 @@ class QLearningTable:
         self.q_table_final = pd.DataFrame(columns=self.actions, dtype=np.float64)
 
     # Function for choosing the action for the agent
-    def choose_action(self, observation):
+    def choose_action(self, observation, env):
         # Checking if the state exists in the table
         self.check_state_exist(observation)
         # Selection of the action - 90 % according to the epsilon == 0.9
@@ -35,7 +39,29 @@ class QLearningTable:
         else:
             # Choosing random action - left 10 % for choosing randomly
             action = np.random.choice(self.actions)
-        return action
+        
+        valid = False
+        state = env.canvas_widget.coords(env.agent)
+        # Action 'up'
+        if action == 0:
+            if state[1] >= pixels:
+                valid = True
+        # Action 'down'
+        elif action == 1:
+            if state[1] < (env_height - 1) * pixels:
+                valid = True
+        # Action right
+        elif action == 2:
+            if state[0] < (env_width - 1) * pixels:
+                valid = True
+        # Action left
+        elif action == 3:
+            if state[0] >= pixels:
+                valid = True
+        if valid:
+            return action
+        else:
+            return self.choose_action(str(observation), env)
 
     # Function for learning and updating Q-table with new knowledge
     def learn(self, state, action, reward, next_state):

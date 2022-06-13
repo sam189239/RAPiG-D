@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import freenect
 import cv2
-from STEREO_CAM.demo import frame_convert2
+from Kinect.demo import frame_convert2
 import numpy as np
 import time
 import requests
@@ -12,7 +12,7 @@ threshold = 150
 current_depth = 450
 height = 480
 width = 640
-roi_val = 0.25
+roi_val = 0.15
 
 ROI = [(int(width * roi_val), int(height * roi_val)), (int(width * (1-roi_val)), int(height * (1-roi_val)))]
 

@@ -62,11 +62,11 @@ def update():
             # RL chooses action based on observation
             action = RL.choose_action(str(observation))
 
-            try:
-                send_to_flask(step = i, episode = episode, m = m, action = str(actions[action]) + " chosen, press Enter")
-            except:
-                print("not sent")
-                pass
+            #try:
+            #    send_to_flask(step = i, episode = episode, m = m, action = str(actions[action]) + " chosen, press Enter")
+            #except:
+            #    print("not sent")
+            #    pass
             
             input(str(actions[action]) + " chosen, press Enter")
 
