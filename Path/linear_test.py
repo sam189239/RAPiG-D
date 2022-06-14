@@ -9,12 +9,12 @@ import numpy as np
 import time
 import datetime as dt
 
-alert_thresh = 0.15
+alert_thresh = 0.1
 threshold = 150
 current_depth = 450
 height = 480
 width = 640
-roi_val = 0.15
+roi_val = 0.2
 
 ROI = [(int(width * roi_val), int(height * roi_val)), (int(width * (1-roi_val)), int(height * (1-roi_val)))]
 
@@ -191,13 +191,13 @@ def move_one_f():
     fwd()
     time.sleep(1.32)
     stop()
-    time.sleep(3)
+    time.sleep(1)
 
 def move_one_b():
     back()
     time.sleep(1.32)
     stop()
-    time.sleep(3)
+    time.sleep(1)
     
 def is_obstacle():
     global threshold

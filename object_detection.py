@@ -7,12 +7,12 @@ import time
 import requests
 import subprocess
 
-alert_thresh = 0.15
+alert_thresh = 0.1
 threshold = 150
 current_depth = 450
 height = 480
 width = 640
-roi_val = 0.15
+roi_val = 0.2
 
 ROI = [(int(width * roi_val), int(height * roi_val)), (int(width * (1-roi_val)), int(height * (1-roi_val)))]
 
