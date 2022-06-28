@@ -69,8 +69,8 @@ def left_mpu(gyro_offsets):
         t_vec.append(time.time()-t0)
         data_offseted = np.array(data)[:,rot_axis]#-gyro_offsets[rot_axis]
         integ1_array = cumtrapz(data_offseted,x=t_vec) # integrate once in time
-        time.sleep(1.5)
-        break
+        #time.sleep(1.5)
+        #break
         try:
             angle = integ1_array[-1]
         except:
@@ -89,8 +89,8 @@ def right_mpu(gyro_offsets):
         t_vec.append(time.time()-t0)
         data_offseted = np.array(data)[:,rot_axis]#-gyro_offsets[rot_axis]
         integ1_array = cumtrapz(data_offseted,x=t_vec) # integrate once in time
-        time.sleep(1.5)
-        break
+        #time.sleep(1.5)
+        #break
         try:
             angle = integ1_array[-1]
         except:
