@@ -1,4 +1,6 @@
-## Exploration and Obstacle avoidance bot
+## Reinforcement Learning based Automated Path Planning using Depth in Garden Environment
+
+Exploration and Obstacle avoidance bot based on reinforcement learning that generates a map of an unknown environment
 
 Each module is placed in a different folder
 
