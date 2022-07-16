@@ -21,17 +21,18 @@ from PIL import Image, ImageTk  # For adding images into the canvas widget
 
 # Setting the sizes for the environment
 pixels = 40   # pixels
-env_height = 9  # grid height
-env_width = 9  # grid width
+env_height = 10  # grid height
+env_width = 10 # grid width
 
 # Global variable for dictionary with coordinates for the final route
 a = {}
 
 obs_coord = []
-obs_pos = { (3,4):2, (0,2):6, (1,0):5, (3,2):2, (4,0):12, (5,3):7, (7,3):9, (6,1):10, (5,5):4, (6,5):4, 
-            (5,6):4, (5,7):4, (0,8):3, (3,7):8, (0,4):1, (8,0):3, (7,7):4, (1,6):11, (8,3):8, (7,6):4, (7,5):4, (2,3):2
-        }
-flag_pos = [6,6]
+obs_pos = { (0,2):1, (1,5):2, (1,8):3, (2,3):4, (3,3):5, (4,1):6, (5,5):7, (5,8):8, (5,9):9, (6,5):10, (7,2):11, (7,3):12, (8,8):1, (9,8):6}
+        #     (3,4):2, (0,3):6, (1,0):5, (3,2):2, (4,0):12, (5,3):7, (7,3):9, (6,1):10, (5,5):4, (6,5):4, 
+        #     (5,6):4, (5,7):4, (0,8):3, (3,7):8, (0,4):1, (8,0):3, (7,7):4, (1,6):11, (8,3):8, (7,6):4, (7,5):4, (2,3):2
+        # }
+flag_pos = [9,9]
 flag_coord = flag_pos * pixels
 
 obs_visited = []
@@ -137,7 +138,7 @@ class Environment(tk.Tk, object):
         # Final Point
         img_flag = Image.open("images/flag.png")
         self.flag_object = ImageTk.PhotoImage(img_flag)
-        self.flag = self.canvas_widget.create_image(pixels * 6, pixels * 6, anchor='nw', image=self.flag_object)
+        self.flag = self.canvas_widget.create_image(pixels * 9, pixels * 9, anchor='nw', image=self.flag_object)
 
         # Uploading the image of Mobile Robot
         img_robot = Image.open("images/agent1.png")

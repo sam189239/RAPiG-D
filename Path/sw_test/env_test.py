@@ -121,7 +121,7 @@ class Environment(tk.Tk, object):
         img_obstacle2 = Image.open("../images/tree1.png")
         self.obstacle_object.append(ImageTk.PhotoImage(img_obstacle2))
         # Obstacle type 3 - tree2
-        img_obstacle3 = Image.open("../images/tree2.png")
+        img_obstacle3 = Image.open("../images/road_closed1.png")
         self.obstacle_object.append(ImageTk.PhotoImage(img_obstacle3))
         
         self.obstacle = []

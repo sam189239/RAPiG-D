@@ -22,9 +22,9 @@ n=0
 def send_to_flask(obj):
     global n
     if obj:
-    	data = {'obj':'obj'}
+        data = {'obj':'obj'}
     else:
-    	data = {'obj':'no_obj'}
+        data = {'obj':'no_obj'}
     r = requests.post("http://localhost:8000", data = data)
     n = n+1
 
@@ -57,17 +57,17 @@ def show_depth(): ## 640x480
         color = (0, 0, 255)
         print('Object')
         try:
-        	send_to_flask(True)
+            send_to_flask(True)
         except Exception as e:
-        	pass
+            pass
         time.sleep(1)
     else: 
         color = (0, 255, 0)
         try:
-        	send_to_flask(False)
+            send_to_flask(False)    
         except Exception as e:
-        	pass
-    
+            pass
+
     frame = cv2.rectangle(depth, ROI[0], ROI[1], color, 1)
     
     
