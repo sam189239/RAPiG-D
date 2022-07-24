@@ -1,0 +1,2 @@
+Mono depth estimation:
+model download link - https://github.com/isl-org/MiDaS/releases/tag/v2_1 

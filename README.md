@@ -22,5 +22,3 @@ https://docs.google.com/document/d/1vwrGxCIrcvRqucOWhcWR-VRB-sS4QpR6IvBUO1a9d54/
 Demo Video:
 https://drive.google.com/file/d/1geeB6b_IMg25FVcpojCWtTqXy9dkzQ7q/view?usp=sharing
 
-Mono depth estimation:
-model download link - https://github.com/isl-org/MiDaS/releases/tag/v2_1 
