@@ -3,7 +3,11 @@
 Exploration and Obstacle avoidance bot based on reinforcement learning that generates a map of an unknown environment
 
 Each module is placed in a different folder
+Main module: Path Planning
 
+Platform:   Ubuntu 20.04 on NVIDIA Jetson Nano Developer Kit
+            Python 3.7
+        
 Instructions to run:
 
 cd into Path
