@@ -25,4 +25,4 @@ https://docs.google.com/document/d/1vwrGxCIrcvRqucOWhcWR-VRB-sS4QpR6IvBUO1a9d54/
 Demo Video:
 https://drive.google.com/file/d/1geeB6b_IMg25FVcpojCWtTqXy9dkzQ7q/view?usp=sharing
 
-![Poster](https://github.com/sam189239/RAPiG-D/blob/main/Archive/Documents/Poster/RAPIG-D Poster_page-0001.png?raw=true)
+![Poster](https://github.com/sam189239/RAPiG-D/blob/main/Archive/Documents/Poster/RAPIG-D Poster_page-0001.jpg?raw=true)
